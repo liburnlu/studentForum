@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
-            $table->text('content');
+            $table->text('description');
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Topic::class);
             $table->timestamps();

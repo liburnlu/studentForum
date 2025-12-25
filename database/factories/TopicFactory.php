@@ -23,7 +23,7 @@ class TopicFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'content' => fake()->paragraph(),
+            'description' => fake()->paragraph(),
             'views' => fake()->randomDigit(),
             'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
             'category_id' => Category::inRandomOrder()->first()->id ?? Category::factory()

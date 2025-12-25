@@ -19,7 +19,7 @@ class ReplyFactory extends Factory
     public function definition(): array
     {
         return [
-            'content' => fake()->text,
+            'description' => fake()->text,
             'topic_id' => Topic::inRandomOrder()->first()->id ?? Topic::factory(),
             'user_id' => User::inRandomOrder()->first()->id ?? User::factory()
         ];

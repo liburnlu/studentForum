@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->text('content');
-            $table->integer('views');
+            $table->text('description');
+            $table->integer('views')->default(0);
             $table->foreignIdFor(App\Models\User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(App\Models\Category::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

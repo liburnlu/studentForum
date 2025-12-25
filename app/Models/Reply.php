@@ -10,7 +10,7 @@ class Reply extends Model
     /** @use HasFactory<\Database\Factories\ReplyFactory> */
     use HasFactory;
 
-    protected $fillable = ['content', 'topic_id', 'user_id'];
+    protected $fillable = ['description', 'topic_id', 'user_id'];
 
     public function topic(){
         return $this->belongsTo(Topic::class);

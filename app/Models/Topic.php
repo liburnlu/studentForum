@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Topic extends Model
 {
@@ -13,7 +14,7 @@ class Topic extends Model
 
     protected $fillable = [
         'title',
-        'content',
+        'description',
         'slug',
         'views',
         'user_id',
@@ -35,17 +36,5 @@ class Topic extends Model
     }
 
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($topic) {
-            if (empty($topic->slug)) {
-                $slug = Str::slug($topic->title);
-                $count = static::where('slug', 'LIKE', "{$slug}%")->count();
-                $topic->slug = $count > 0 ? "{$slug}-" . ($count + 1) : $slug;
-            }
-        });
-    }
 
 }
