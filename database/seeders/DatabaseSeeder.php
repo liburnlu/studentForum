@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Reply;
 use App\Models\Topic;
 use App\Models\Category;
 use App\Models\User;
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
         User::factory(20)->create();
         Category::factory(20)->create();
         Topic::factory(20)->create();
+        Reply::factory(20)->create();
 
     }
 }
