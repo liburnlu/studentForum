@@ -6,7 +6,9 @@ use App\Models\Category;
 use App\Models\Reply;
 use App\Models\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use function Laravel\Prompts\table;
 
 class TopicController extends Controller
 {
@@ -15,9 +17,37 @@ class TopicController extends Controller
      */
     public function index()
     {
-        $topics = Topic::all();
 
-        return view('topics.index' , ['topics' => $topics]);
+        $topics = Topic::query();
+
+        if(request()->query('categories')){
+            $topics->whereIn('category_id' , request()->categories)->get();
+        }
+
+
+
+        if(request()->query('sort') === 'views'){
+
+            $topics->orderBY('views', 'DESC')->get();
+        }
+
+        if(request()->query('sort') === 'replies'){
+            $topics->withCount('replies')->orderByDesc('replies_count')->get();
+        }
+
+        $query = request()->query('search');
+
+        if(request()->filled('search')){
+            $topics->where(
+                'title' , 'like'  , '%' . $query . '%'
+            )->get();
+        }
+
+        $topics = $topics->with('category')->paginate(7)->withQueryString();
+
+        $categories = Category::all();
+
+        return view('topics.index' , ['topics' => $topics, 'categories' => $categories]);
     }
 
     /**
@@ -102,4 +132,8 @@ class TopicController extends Controller
     $topic->delete();
     return redirect()->route('topics.index');
     }
+
+
+
+
 }

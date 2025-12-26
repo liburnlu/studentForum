@@ -4,28 +4,136 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Forum Topics
             </h2>
-            @auth
-                <a href="{{ route('topics.create') }}"
-                   class="inline-flex items-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Create Topic
-                </a>
-            @endauth
         </div>
     </x-slot>
+    <!-- Filtering -->
+    <div class="flex items-start gap-6 my-4 max-w-7xl mx-auto px-6 justify-between items-center">
+
+        <!-- Category Filter -->
+        <div>
+            <form method="GET" action="/topics">
+                <details class="group w-64">
+                    <summary
+                        class="flex items-center justify-between gap-2 border-b border-gray-300 p-2 text-gray-700 hover:border-gray-400 [&::-webkit-details-marker]:hidden">
+                        <span class="text-sm font-medium">Filter / Category</span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor"
+                             class="size-4 transition-transform group-open:-rotate-180">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                        </svg>
+                    </summary>
+
+                    <div class="mt-2 p-2">
+                        <div class="flex flex-col gap-2">
+                            @foreach($categories as $category)
+                                <label class="inline-flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        name="categories[]"
+                                        value="{{ $category->id }}"
+                                        class="rounded border-gray-300"
+                                        {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}
+                                    >
+                                    <span class="text-sm text-gray-700">{{ $category->name }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
+                        <div class="mt-3 flex justify-between">
+                            <button type="submit"
+                                    class="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">
+                                Filter
+                            </button>
+
+                            <a href="{{ route('topics.index') }}"
+                               class="text-sm text-gray-700 underline hover:text-gray-900">
+                                Reset
+                            </a>
+                        </div>
+                    </div>
+                </details>
+            </form>
+
+            <!-- Sort By -->
+            <form method="GET" action="/topics">
+                <details class="group w-56">
+                    <summary
+                        class="flex items-center justify-between gap-2 border-b border-gray-300 p-2 text-gray-700 hover:border-gray-400 [&::-webkit-details-marker]:hidden">
+                        <span class="text-sm font-medium">Sort by</span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor"
+                             class="size-4 transition-transform group-open:-rotate-180">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                        </svg>
+                    </summary>
+
+                    <div class="mt-2 overflow-hidden rounded border border-gray-300 bg-white shadow-sm">
+                        <button
+                            type="submit"
+                            name="sort"
+                            value="views"
+                            class="block w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50">
+                            Most views
+                        </button>
+
+                        <button
+                            type="submit"
+                            name="sort"
+                            value="replies"
+                            class="block w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50">
+                            Most replies
+                        </button>
+
+                    </div>
+                </details>
+            </form>
+        </div>
+
+        <div>
+            <form action="/topics" method="GET">
+                <label for="Search">
+                    <span class="text-sm font-medium text-gray-700"> Search </span>
+
+                    <div class="relative">
+                        <input type="text" id="search"
+                               class="mt-0.5 w-full rounded border-gray-300 pe-10 shadow-sm sm:text-sm"
+                        name="search" placeholder="Search for a topic">
+
+                        <span class="absolute inset-y-0 right-2 grid w-8 place-content-center">
+      <button type="submit" aria-label="Submit"
+              class="rounded-full p-1.5 text-gray-700 transition-colors hover:bg-gray-100">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="size-4">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
+        </svg>
+      </button>
+    </span>
+                    </div>
+                </label>
+            </form>
+        </div>
+
+
+    </div>
+
 
     <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="space-y-4">
                 @foreach($topics as $topic)
-                    <article class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
+                    <article
+                        class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
                         <div class="p-6">
                             <div class="flex items-start gap-4">
                                 <!-- Left: User Avatar -->
                                 <div class="flex-shrink-0">
-                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                                    <div
+                                        class="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
                                         {{ strtoupper(substr($topic->user->name, 0, 1)) }}
                                     </div>
                                 </div>
@@ -34,14 +142,16 @@
                                 <div class="flex-1 min-w-0">
                                     <!-- Top Row: Category + Badges -->
                                     <div class="flex items-center gap-2 mb-3">
-                                        <span class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                                        <span
+                                            class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
                                             {{ $topic->category->name }}
                                         </span>
                                     </div>
 
                                     <!-- Title -->
                                     <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                                        <a href="{{ route('topics.show', $topic) }}" class="hover:text-indigo-600 transition-colors">
+                                        <a href="{{ route('topics.show', $topic) }}"
+                                           class="hover:text-indigo-600 transition-colors">
                                             {{ $topic->title }}
                                         </a>
                                     </h3>
@@ -62,8 +172,10 @@
 
                                         <!-- Time -->
                                         <div class="flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                 viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
                                             <span>{{ $topic->created_at->diffForHumans() }}</span>
                                         </div>
@@ -72,8 +184,10 @@
 
                                         <!-- Replies -->
                                         <div class="flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                 viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                             </svg>
                                             <span class="font-medium">{{ $topic->replies->count() }}</span>
                                         </div>
@@ -82,9 +196,12 @@
 
                                         <!-- Views -->
                                         <div class="flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                 viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
                                             <span>{{ $topic->views }}</span>
                                         </div>
@@ -94,7 +211,8 @@
                                             <span class="text-gray-300">•</span>
                                             <div class="flex items-center gap-1 text-xs">
                                                 <span class="text-gray-400">Last reply by</span>
-                                                <span class="font-medium text-gray-600">{{ $topic->replies->last()->user->name }}</span>
+                                                <span
+                                                    class="font-medium text-gray-600">{{ $topic->replies->last()->user->name }}</span>
                                             </div>
                                         @endif
                                     </div>
@@ -104,10 +222,10 @@
                     </article>
 
                 @endforeach
+                    {{ $topics->withQueryString()->links() }}
             </div>
-
-
 
         </div>
     </div>
+
 </x-app-layout>

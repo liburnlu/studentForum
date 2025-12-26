@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+Route::controller(ReplyController::class)->group(function () {
+    Route::post('/topics/{topic}/replies', 'store')->name('replies.store');
+    Route::get('/replies/{reply}/edit', 'edit')->name('replies.edit');
+    Route::patch('/replies/{reply}', 'update')->name('replies.update');
+    Route::delete('replies/{reply}', 'destroy')->name('replies.destroy');
+});
 
 Route::controller(TopicController::class)->group(function () {
     Route::get('/topics', 'index')->name('topics.index');

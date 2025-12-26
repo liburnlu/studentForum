@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Forum Topics
+                {{$topic->title}}
             </h2>
         </div>
     </x-slot>
@@ -155,11 +155,11 @@
                             @auth
                                 <div class="flex items-center gap-4 text-sm">
                                     @if(auth()->user()->id === $reply->user_id)
-                                        <a href="/"
+                                        <a href="{{route('replies.edit' , $reply)}}"
                                            class="text-indigo-600 hover:text-indigo-800 font-medium">
                                             Edit
                                         </a>
-                                        <form method="POST" action="/"
+                                        <form method="POST" action="{{route('replies.destroy' , $reply)}}"
                                               class="inline" onsubmit="return confirm('Delete this reply?');">
                                             @csrf
                                             @method('DELETE')
@@ -192,19 +192,19 @@
                     <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                         <h3 class="text-lg font-semibold text-gray-900">Add a Reply</h3>
                     </div>
-                    <form method="POST" action="/" class="p-6">
+                    <form method="POST" action="{{route('replies.store' , $topic)}}" class="p-6">
                         @csrf
 
                         <div class="mb-4">
-                            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Your Reply</label>
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Your Reply</label>
                             <textarea
-                                id="content"
-                                name="content"
+                                id="description"
+                                name="description"
                                 rows="4"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('content') border-red-500 @enderror"
                                 placeholder="Share your thoughts..."
-                                required>{{ old('content') }}</textarea>
-                            @error('content')
+                                required>{{ old('description') }}</textarea>
+                            @error('description')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
