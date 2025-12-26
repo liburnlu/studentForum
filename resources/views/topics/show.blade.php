@@ -14,7 +14,8 @@
                 <div class="p-6 sm:p-8">
                     <!-- Category Badge -->
                     <div class="mb-4">
-                        <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-800">
+                        <span
+                            class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-800">
                             {{ $topic->category->name }}
                         </span>
                     </div>
@@ -28,7 +29,8 @@
                     <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                         <!-- Author -->
                         <div class="flex items-center">
-                            <div class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold mr-2">
+                            <div
+                                class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold mr-2">
                                 {{ strtoupper(substr($topic->user->name, 0, 1)) }}
                             </div>
                             <span>
@@ -41,8 +43,10 @@
 
                         <!-- Time -->
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-gray-400" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             {{ $topic->created_at->diffForHumans() }}
                         </div>
@@ -51,9 +55,12 @@
 
                         <!-- Views -->
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-gray-400" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                             </svg>
                             {{ $topic->views }} {{ Str::plural('view', $topic->views) }}
                         </div>
@@ -62,8 +69,10 @@
 
                         <!-- Replies -->
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-gray-400" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
                             </svg>
                             {{ $topic->replies->count() }} {{ Str::plural('reply', $topic->replies->count()) }}
                         </div>
@@ -80,27 +89,32 @@
                     <!-- Action Buttons -->
 
 
-                            <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
-                                <a href="/topics/{{$topic->id}}/edit"
-                                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    Edit Topic
-                                </a>
+                    <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+                        <a href="/topics/{{$topic->id}}/edit"
+                           class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            Edit Topic
+                        </a>
 
-                                <form method="POST" action="/topics/{{$topic->id}}" onsubmit="return confirm('Are you sure you want to delete this topic?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                            class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                        Delete Topic
-                                    </button>
-                                </form>
-                            </div>
+                        <form method="POST" action="/topics/{{$topic->id}}"
+                              onsubmit="return confirm('Are you sure you want to delete this topic?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Delete Topic
+                            </button>
+                        </form>
+                    </div>
 
 
                 </div>
@@ -115,13 +129,14 @@
                 </div>
 
                 <div class="divide-y divide-gray-200">
-                    @forelse($topic->replies as $reply)
+                    @foreach($topic->replies as $reply)
                         <div class="p-6 hover:bg-gray-50 transition">
                             <!-- Reply Header -->
                             <div class="flex items-start justify-between mb-4">
                                 <div class="flex items-center">
                                     <!-- User Avatar -->
-                                    <div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold mr-3">
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold mr-3">
                                         {{ strtoupper(substr($reply->user->name, 0, 1)) }}
                                     </div>
                                     <div>
@@ -139,11 +154,13 @@
                             <!-- Reply Actions -->
                             @auth
                                 <div class="flex items-center gap-4 text-sm">
-                                    @if(auth()->id() === $reply->user_id)
-                                        <a href="{{ route('replies.edit', $reply) }}" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                    @if(auth()->user()->id === $reply->user_id)
+                                        <a href="/"
+                                           class="text-indigo-600 hover:text-indigo-800 font-medium">
                                             Edit
                                         </a>
-                                        <form method="POST" action="{{ route('replies.destroy', $reply) }}" class="inline" onsubmit="return confirm('Delete this reply?');">
+                                        <form method="POST" action="/"
+                                              class="inline" onsubmit="return confirm('Delete this reply?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
@@ -151,81 +168,65 @@
                                             </button>
                                         </form>
                                     @endif
-
-                                    @if(auth()->id() === $topic->user_id && !$reply->is_solution)
-                                        <form method="POST" action="{{ route('replies.mark-solution', $reply) }}" class="inline">
-                                            @csrf
-                                            <button type="submit" class="text-green-600 hover:text-green-800 font-medium">
-                                                Mark as Solution
-                                            </button>
-                                        </form>
-                                    @endif
                                 </div>
                             @endauth
                         </div>
-                    @empty
-                        <div class="p-12 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-900">No replies yet</h3>
-                            <p class="mt-1 text-sm text-gray-500">Be the first to reply to this topic.</p>
-                        </div>
-                    @endforelse
+                    @endforeach
+                        @if($reply->count() === 0)
+                            <div class="p-12 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                                <h3 class="mt-2 text-sm font-medium text-gray-900">No replies yet</h3>
+                                <p class="mt-1 text-sm text-gray-500">Be the first to reply to this topic.</p>
+                            </div>
+                        @endif
                 </div>
             </div>
 
             <!-- Reply Form -->
             @auth
-                @if(!$topic->is_locked)
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
-                        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                            <h3 class="text-lg font-semibold text-gray-900">Add a Reply</h3>
-                        </div>
-                        <form method="POST" action="{{ route('replies.store', $topic) }}" class="p-6">
-                            @csrf
-
-                            <div class="mb-4">
-                                <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Your Reply</label>
-                                <textarea
-                                    id="content"
-                                    name="content"
-                                    rows="4"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('content') border-red-500 @enderror"
-                                    placeholder="Share your thoughts..."
-                                    required>{{ old('content') }}</textarea>
-                                @error('content')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div class="flex justify-end">
-                                <button type="submit" class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                    Post Reply
-                                </button>
-                            </div>
-                        </form>
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-900">Add a Reply</h3>
                     </div>
-                @else
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                        <div class="flex">
-                            <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                            </svg>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-yellow-800">Topic Locked</h3>
-                                <p class="mt-1 text-sm text-yellow-700">This topic has been locked and no longer accepts new replies.</p>
-                            </div>
+                    <form method="POST" action="/" class="p-6">
+                        @csrf
+
+                        <div class="mb-4">
+                            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Your Reply</label>
+                            <textarea
+                                id="content"
+                                name="content"
+                                rows="4"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('content') border-red-500 @enderror"
+                                placeholder="Share your thoughts..."
+                                required>{{ old('content') }}</textarea>
+                            @error('content')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
-                    </div>
-                @endif
+
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                    class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                </svg>
+                                Post Reply
+                            </button>
+                        </div>
+                    </form>
+                </div>
             @else
                 <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
                     <p class="text-gray-600 mb-4">Please log in to reply to this topic.</p>
-                    <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white hover:bg-indigo-700 transition">
+                    <a href="{{ route('login') }}"
+                       class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-sm text-white hover:bg-indigo-700 transition">
                         Log In to Reply
                     </a>
                 </div>
@@ -235,8 +236,10 @@
             <div class="mt-6">
                 <a href="{{ route('topics.index') }}"
                    class="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
                     Back to all topics
                 </a>

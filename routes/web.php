@@ -18,13 +18,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-Route::get('/topics' , [TopicController::class, 'index'])->name('topics.index');
-Route::get('/topics/create' , [TopicController::class, 'create'])->name('topics.create');
-Route::post('/topics' , [TopicController::class, 'store'])->name('topics.store');
-Route::get('/topics/{topic}/edit' , [TopicController::class, 'edit'])->name('topics.edit');
-Route::patch('/topics/{topic}' , [TopicController::class, 'update'])->name('topics.update');
-Route::delete('/topics/{topic}' , [TopicController::class, 'destroy'])->name('topics.destroy');
-Route::get('/topics/{topic:id}' , [TopicController::class, 'show'])->name('topics.show');
+Route::controller(TopicController::class)->group(function () {
+    Route::get('/topics', 'index')->name('topics.index');
+    Route::get('/topics/create', 'create')->name('topics.create');
+    Route::post('/topics', 'store')->name('topics.store');
+    Route::get('/topics/{topic}/edit', 'edit')->name('topics.edit');
+    Route::patch('/topics/{topic}', 'update')->name('topics.update');
+    Route::delete('/topics/{topic}', 'destroy')->name('topics.destroy');
+    Route::get('/topics/{topic:id}', 'show')->name('topics.show');
+
+});
+
 
