@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-3xl mx-auto mt-10 px-6">
+    <div class="max-w-3xl mx-auto mt-10 px-6 pb-20">
         <div class="bg-white shadow-sm rounded-lg p-6">
             <form method="POST" action="{{ route('replies.update', $reply) }}" class="space-y-6">
                 @csrf
@@ -54,4 +54,5 @@
             </form>
         </div>
     </div>
+    @include('layouts.footer')
 </x-app-layout>

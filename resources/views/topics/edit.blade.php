@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-4xl mx-auto mt-10 px-6">
+    <div class="max-w-4xl mx-auto mt-10 px-6 pb-10">
         <form method="POST" action="/topics/{{$topic->id}}" class="space-y-6">
             @csrf
             @method('PATCH')

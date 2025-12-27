@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\FilterController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\TopicController;
@@ -11,9 +11,6 @@ Route::get('/', function () {
     return view('splash');
 })->name('splash');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,6 +32,13 @@ Route::controller(ReplyController::class)->group(function () {
 Route::controller(BookmarkController::class)->group(function () {
     Route::get('/bookmarks', 'index')->name('bookmarks.index');
     Route::post('/bookmarks', 'toggle')->name('bookmarks.toggle');
+});
+
+Route::controller(DashboardController::class)->group(function () {
+    Route::get('/dashboard', 'index')->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard/topics' , 'topics')->middleware(['auth', 'verified'])->name('dashboard.topics');
+    Route::get('/dashboard/replies' , 'replies')->middleware(['auth', 'verified'])->name('dashboard.replies');
+
 });
 
 Route::controller(TopicController::class)->group(function () {

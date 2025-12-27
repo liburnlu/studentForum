@@ -24,8 +24,6 @@ class TopicController extends Controller
             $topics->whereIn('category_id' , request()->categories)->get();
         }
 
-
-
         if(request()->query('sort') === 'views'){
 
             $topics->orderBY('views', 'DESC')->get();
