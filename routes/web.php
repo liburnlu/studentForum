@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\FilterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
@@ -28,6 +29,12 @@ Route::controller(ReplyController::class)->group(function () {
     Route::get('/replies/{reply}/edit', 'edit')->name('replies.edit');
     Route::patch('/replies/{reply}', 'update')->name('replies.update');
     Route::delete('replies/{reply}', 'destroy')->name('replies.destroy');
+});
+
+
+Route::controller(BookmarkController::class)->group(function () {
+    Route::get('/bookmarks', 'index')->name('bookmarks.index');
+    Route::post('/bookmarks', 'toggle')->name('bookmarks.toggle');
 });
 
 Route::controller(TopicController::class)->group(function () {

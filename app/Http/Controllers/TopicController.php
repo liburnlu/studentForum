@@ -43,7 +43,7 @@ class TopicController extends Controller
             )->get();
         }
 
-        $topics = $topics->with('category')->paginate(7)->withQueryString();
+        $topics = $topics->with('category')->latest()->paginate(7)->withQueryString();
 
         $categories = Category::all();
 
@@ -88,6 +88,23 @@ class TopicController extends Controller
      */
     public function show(Topic $topic)
     {
+
+        if (auth()->check()) {
+            $alreadyViewed = $topic->views()
+                ->where('user_id', auth()->id())
+                ->exists();
+
+            if (!$alreadyViewed) {
+                $topic->views()->create([
+                    'user_id' => auth()->id(),
+                ]);
+
+                $topic->increment('views');
+
+            }
+        }
+
+
         $reply  = $topic->replies()->get();
         return view('topics.show' , ['topic' => $topic , 'reply' => $reply]);
     }
@@ -132,8 +149,5 @@ class TopicController extends Controller
     $topic->delete();
     return redirect()->route('topics.index');
     }
-
-
-
 
 }

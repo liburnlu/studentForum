@@ -35,6 +35,13 @@ class Topic extends Model
         return $this->hasMany(Reply::class);
     }
 
+    public function views(){
+        return $this->hasMany(TopicView::class);
+    }
+
+    public function bookmarks(){
+        return $this->hasMany(Bookmark::class);
+    }
 
 
 }
