@@ -75,7 +75,7 @@
                 <form action="/topics" method="GET">
                     <div class="relative">
                         <input type="text" name="search" placeholder="Search for a topic"
-                               value="{{ request('search') }}"
+                               value="{{ request()->input('search') }}"
                                class="w-full rounded border-gray-300 pl-3 pr-10 py-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <button type="submit" class="absolute right-1 top-1/2 -translate-y-1/2 p-1.5 text-gray-700 rounded hover:bg-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
@@ -158,7 +158,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                     </svg>
-                                    <span class="font-medium">{{ $topic->replies->count() }}</span>
+                                    <span class="font-medium">{{ $topic->replies_count ?? $topic->replies->count()}}</span>
                                 </div>
 
                                 <span class="text-gray-300">•</span>
@@ -173,11 +173,11 @@
                                 </div>
 
                                 <!-- Last reply -->
-                                @if($topic->replies->count() > 0)
+                                @if($topic->replies_count > 0)
                                     <span class="text-gray-300">•</span>
                                     <div class="flex items-center gap-1 text-xs">
                                         <span class="text-gray-400">Last reply by</span>
-                                        <span class="font-medium text-gray-600">{{ $topic->replies->last()->user->name }}</span>
+                                        <span class="font-medium text-gray-600">{{ $topic->latestReply->user->name }}</span>
                                     </div>
                                 @endif
                             </div>

@@ -28,6 +28,8 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+
+
         $latestReplies = $user->replies()
             ->with('topic')
             ->latest()

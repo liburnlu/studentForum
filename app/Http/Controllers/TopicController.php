@@ -20,28 +20,32 @@ class TopicController extends Controller
 
         $topics = Topic::query();
 
-        if(request()->query('categories')){
-            $topics->whereIn('category_id' , request()->categories)->get();
+        if(request()->filled('categories')){
+            $topics->whereIn('category_id' , request()->input('categories'));
         }
 
         if(request()->query('sort') === 'views'){
 
-            $topics->orderBY('views', 'DESC')->get();
+            $topics->orderByDesc('views');
         }
 
         if(request()->query('sort') === 'replies'){
-            $topics->withCount('replies')->orderByDesc('replies_count')->get();
+            $topics->withCount('replies')->orderByDesc('replies_count');
         }
+        //withCount gives you a virtual attribute in your model : replies_count
 
-        $query = request()->query('search');
+
 
         if(request()->filled('search')){
+            $queryStringValue = request()->query('search');
+
             $topics->where(
-                'title' , 'like'  , '%' . $query . '%'
-            )->get();
+                'title' , 'like'  , '%' . $queryStringValue . '%'
+            );
         }
 
-        $topics = $topics->with('category')->latest()->paginate(10)->withQueryString();
+        $topics = $topics->with(['category' , 'user' , 'latestReply' , 'bookmarks' => fn($query) => $query->where('user_id' , auth()->user()->id)])
+            ->withCount('replies')->latest()->paginate(10)->withQueryString();
 
         $categories = Category::all();
 
@@ -64,8 +68,8 @@ class TopicController extends Controller
     {
         //validate
         request()->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'title' => ['required', 'string', 'max:255' , 'unique:topics,title'],
+            'description' =>  ['required', 'string', 'min:10'],
             'category_id' => ['required'],
         ]);
 
@@ -74,7 +78,7 @@ class TopicController extends Controller
             'title' => request()->title,
             'slug' => Str::slug(request()->title),
             'description' => request()->description,
-            'user_id' => rand(1,20),
+            'user_id' => auth()->user()->id,
             'category_id' => request()->category_id,
         ]);
 
@@ -102,9 +106,13 @@ class TopicController extends Controller
             }
         }
 
+        $topic->load(['category' , 'user'])->loadCount('replies');
+        //when you have the model you load the relations into it (for eager loading)
+        //when you don't have it you query to it
 
-        $reply  = $topic->replies()->get();
-        return view('topics.show' , ['topic' => $topic , 'reply' => $reply]);
+        $replies  = $topic->replies()->with('user')->latest()->get();
+
+        return view('topics.show' , ['topic' => $topic , 'replies' => $replies]);
     }
 
     /**
@@ -123,8 +131,8 @@ class TopicController extends Controller
     public function update(Topic $topic)
     {
         request()->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'title' => ['required', 'string', 'max:255' , 'unique:topics,title'],
+            'description' =>  ['required', 'string', 'min:10'],
             'category_id' => ['required'],
         ]);
 
@@ -132,7 +140,6 @@ class TopicController extends Controller
             'title' => request()->title,
             'slug' => Str::slug(request()->title),
             'description' => request()->description,
-            'user_id' => old('user_id' , $topic->user_id),
             'category_id' => request()->category_id,
         ]);
 

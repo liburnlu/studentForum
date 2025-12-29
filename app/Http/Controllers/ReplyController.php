@@ -8,35 +8,20 @@ use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Topic $topic)
+    public function store(Topic $topic)
     {
 
-        $request->validate([
+        request()->validate([
             'description' => ['required', 'string', 'max:1000'],
 
         ]);
 
         Reply::create([
-            'description' => $request->description,
+            'description' => request()->description,
             'user_id' => auth()->user()->id,
             'topic_id' => $topic->id
         ]);
@@ -64,15 +49,15 @@ class ReplyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reply $reply)
+    public function update(Reply $reply)
     {
 
-        $request->validate([
+        request()->validate([
             'description' => ['required', 'string', 'max:1000'],
         ]);
 
         $reply->update([
-            'description' => $request->description,
+            'description' => request()->description,
         ]);
 
         return redirect()->route('topics.show' , ['topic' => $reply->topic->id]);
