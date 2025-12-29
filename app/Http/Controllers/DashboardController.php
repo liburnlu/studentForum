@@ -7,22 +7,32 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
 
-    public function index(Request $request)
+    public function index()
     {
-        $stats = ['topics'];
-        //$stats['topics'] = Topic::where('user_id' , auth()->user()->id)->count();
-        $stats['topics'] = auth()->user()->topics()->count();
-
-        $stats['replies'] = auth()->user()->replies()->count();
-
-        $stats['bookmarks'] = auth()->user()->bookmarks()->count();
-
-        $stats['views'] = auth()->user()->topics()->sum('views');
+        $user = auth()->user();
 
 
-        $latestTopics = auth()->user()->topics()->latest()->limit(5)->get();
+        $stats = [];
+        $stats['topics'] = $user->topics()->count();
 
-        $latestReplies = auth()->user()->replies()->latest()->limit(5)->get();
+        $stats['replies'] = $user->replies()->count();
+
+        $stats['bookmarks'] = $user->bookmarks()->count();
+
+        $stats['views'] = $user->topics()->sum('views');
+
+
+        $latestTopics = $user->topics()
+            ->withCount('replies')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        $latestReplies = $user->replies()
+            ->with('topic')
+            ->latest()
+            ->limit(5)
+            ->get();
 
         return view('dashboard.index' , ['stats' => $stats , 'latestTopics' => $latestTopics , 'latestReplies' => $latestReplies]);
 
@@ -31,15 +41,19 @@ class DashboardController extends Controller
     public function topics(){
 
 
-        $topics = auth()->user()->topics()->latest()->paginate(10);
+        $topics = auth()->user()->topics()->withCount('replies')->latest()->paginate(10);
 
         return view('dashboard.topics' , ['topics' => $topics]);
     }
 
     public function replies(){
 
-        $replies = auth()->user()->replies()->latest()->paginate(10);
+        $replies = auth()->user()->replies()->with('topic')->latest()->paginate(10);
 
         return view('dashboard.replies' , ['replies' => $replies]);
     }
+
+    //Dashboard latest topics: withCount('replies') avoids N+1 queries when showing reply counts.
+    //
+    //Dashboard latest replies: with('topic') avoids N+1 queries when displaying the topic title.
 }

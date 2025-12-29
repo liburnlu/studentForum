@@ -41,7 +41,7 @@ class TopicController extends Controller
             )->get();
         }
 
-        $topics = $topics->with('category')->latest()->paginate(7)->withQueryString();
+        $topics = $topics->with('category')->latest()->paginate(10)->withQueryString();
 
         $categories = Category::all();
 
