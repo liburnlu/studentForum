@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="flex min-h-screen bg-gray-50">
-        @include('layouts.sidebar')
+        @include('layouts.user-sidebar')
 
         <main class="flex-1 p-6">
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm">

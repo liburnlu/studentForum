@@ -44,9 +44,10 @@
             </x-primary-button>
         </div>
 
-        <div>
-            <a href="{{route('register')}}" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Don't have an account?
+        <div class="text-sm text-gray-600  rounded-md ">
+            Don't have an account?
+            <a href="{{route('register')}}" class="underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
+               Register
             </a>
         </div>
     </form>

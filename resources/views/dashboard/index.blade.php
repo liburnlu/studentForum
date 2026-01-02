@@ -5,10 +5,10 @@
         </h2>
     </x-slot>
 
-    <div class="flex min-h-screen bg-gray-50">
+    <div class="flex min-h-screen bg-gray-100 ">
 
         <!-- Sidebar -->
-        @include('layouts.sidebar')
+        @include('layouts.user-sidebar')
 
 
         <!-- Main Content -->
@@ -18,25 +18,25 @@
             <!-- Stats -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- My Topics -->
-                <x-dashboard-stats  name="My Topics">
+                <x-dashboard-stat name="My Topics">
                     {{ $stats['topics'] ?? 0 }}
-                </x-dashboard-stats>
+                </x-dashboard-stat>
 
                 <!-- My Replies -->
-                <x-dashboard-stats name="My replies">
+                <x-dashboard-stat name="My replies">
                     {{ $stats['replies'] ?? 0 }}
-                </x-dashboard-stats>
+                </x-dashboard-stat>
 
 
                 <!-- Bookmarks -->
-                <x-dashboard-stats name="Bookmarked topics">
+                <x-dashboard-stat name="Bookmarked topics">
                     {{ $stats['bookmarks'] ?? 0 }}
-                </x-dashboard-stats>
+                </x-dashboard-stat>
 
                 <!-- Views -->
-                <x-dashboard-stats name="Total views">
+                <x-dashboard-stat name="Total views">
                     {{ $stats['views'] ?? 0 }}
-                </x-dashboard-stats>
+                </x-dashboard-stat>
 
             </div>
 

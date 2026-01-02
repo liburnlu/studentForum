@@ -7,7 +7,7 @@
 
     <div class="flex min-h-screen bg-gray-50">
         <!-- Sidebar -->
-        @include('layouts.sidebar') {{-- reuse your sidebar component --}}
+        @include('layouts.user-sidebar') {{-- reuse your sidebar component --}}
 
         <!-- Main Content -->
         <main class="flex-1 p-6">

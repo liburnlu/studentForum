@@ -1,9 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-bold text-2xl text-gray-800 leading-tight">
+        <div class="flex items-center justify-between w-full">
+            <h2 class="font-semibold text-xl text-gray-800">
                 Forum Topics
             </h2>
+
+            <x-button-link href="{{ route('topics.create') }}">
+                Create Topic
+            </x-button-link>
         </div>
     </x-slot>
 
@@ -141,7 +145,7 @@
                             <!-- Meta Info -->
                             <div class="flex flex-wrap items-center gap-4 text-xs text-gray-500">
                                 <div class="flex items-center gap-1">
-                                    <span class="font-medium text-gray-700">{{ $topic->user->name }}</span>
+                                    <span class="font-medium text-gray-700">{{ $topic->user->name ?? 'Deleted User' }}</span>
                                 </div>
                                 <span class="text-gray-300">•</span>
                                 <div class="flex items-center gap-1">

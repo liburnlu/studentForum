@@ -1,10 +1,15 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminPanel;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\UserController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,6 +24,13 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+
+Route::get('/admin', [AdminDashboardController::class , '__invoke'])->middleware(['auth', 'verified'])->name('admin');
+
+
+
 
 
 Route::controller(ReplyController::class)->group(function () {
@@ -36,10 +48,11 @@ Route::controller(BookmarkController::class)->group(function () {
 
 Route::controller(DashboardController::class)->group(function () {
     Route::get('/dashboard', 'index')->middleware(['auth', 'verified'])->name('dashboard');
-    Route::get('/dashboard/topics' , 'topics')->middleware(['auth', 'verified'])->name('dashboard.topics');
-    Route::get('/dashboard/replies' , 'replies')->middleware(['auth', 'verified'])->name('dashboard.replies');
+    Route::get('/dashboard/topics', 'topics')->middleware(['auth', 'verified'])->name('dashboard.topics');
+    Route::get('/dashboard/replies', 'replies')->middleware(['auth', 'verified'])->name('dashboard.replies');
 
 });
+
 
 Route::controller(TopicController::class)->group(function () {
     Route::get('/topics', 'index')->middleware('auth')->name('topics.index');
@@ -50,6 +63,24 @@ Route::controller(TopicController::class)->group(function () {
     Route::delete('/topics/{topic}', 'destroy')->name('topics.destroy');
     Route::get('/topics/{topic:id}', 'show')->name('topics.show');
 
+});
+
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/admin/categories', 'index')->middleware(['auth', 'verified'])->name('admin.categories.index');
+    Route::get('/admin/categories/create', 'create')->middleware(['auth', 'verified'])->name('admin.categories.create');
+    Route::post('/admin/categories', 'store')->middleware(['auth', 'verified'])->name('admin.categories.store');
+    Route::get('/admin/categories/{category:id}/edit', 'edit')->middleware(['auth', 'verified'])->name('admin.categories.edit');
+    Route::patch('/admin/categories/{category}', 'update')->middleware(['auth', 'verified'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{category}', 'destroy')->middleware(['auth', 'verified'])->name('admin.categories.destroy');
+    Route::get('/admin/categories/{category}', 'show')->middleware(['auth', 'verified'])->name('admin.categories.show');
+});
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('/admin/users', 'index')->middleware(['auth', 'verified'])->name('admin.users.index');
+    Route::get('/admin/users/{user}/edit' , 'edit')->middleware(['auth', 'verified'])->name('admin.users.edit');
+    Route::patch('admin/users/{user}' , 'update')->middleware(['auth', 'verified'])->name('admin.users.update');
+    Route::delete('/admin/users/{user}', 'destroy')->middleware(['auth', 'verified'])->name('admin.users.destroy');
+    Route::get('/admin/users/{user}', 'show')->middleware(['auth', 'verified'])->name('admin.users.show');
 });
 
 

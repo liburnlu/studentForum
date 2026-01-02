@@ -1,9 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex items-center justify-between w-full">
+            <h2 class="font-semibold text-xl text-gray-800">
                 {{$topic->title}}
             </h2>
+
+            <x-button-link href="{{ route('topics.create') }}">
+                Create Topic
+            </x-button-link>
         </div>
     </x-slot>
 
