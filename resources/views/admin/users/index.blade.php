@@ -1,18 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between w-full">
-            <div>
                 <h2 class="text-2xl font-bold text-gray-800">
                     Users
                 </h2>
-                <p class="text-sm text-gray-500 mt-1">
-                    All registered users
-                </p>
-            </div>
         </div>
     </x-slot>
 
-    <div class="flex bg-gray-50 min-h-screen">
+    <div class="flex bg-gray-100 min-h-screen">
         {{-- Admin Sidebar --}}
         @include('layouts.admin-sidebar')
 
@@ -53,7 +48,8 @@
                             @forelse($users as $user)
                                 <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            <a href="{{route('admin.users.show' , $user)}}">
+                                            <a href="{{route('admin.users.show' , $user)}}"
+                                            class="hover:underline">
                                             {{ $user->name }}
                                             </a>
                                         </td>

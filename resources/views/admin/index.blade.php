@@ -42,6 +42,7 @@
                     </p>
                 </a>
 
+                <!--
                 <a href="/"
                    class="group bg-white rounded-xl border p-6 shadow-sm hover:shadow-md transition">
                     <h3 class="text-lg font-semibold text-gray-800 group-hover:text-indigo-600">
@@ -62,6 +63,7 @@
                     </p>
                 </a>
             </div>
+            -->
 
         </main>
     </div>

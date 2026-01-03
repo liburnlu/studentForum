@@ -20,36 +20,35 @@ class TopicController extends Controller
 
         $topics = Topic::query();
 
-        if(request()->filled('categories')){
-            $topics->whereIn('category_id' , request()->input('categories'));
+        if (request()->filled('categories')) {
+            $topics->whereIn('category_id', request()->input('categories'));
         }
 
-        if(request()->query('sort') === 'views'){
+        if (request()->query('sort') === 'views') {
 
             $topics->orderByDesc('views');
         }
 
-        if(request()->query('sort') === 'replies'){
+        if (request()->query('sort') === 'replies') {
             $topics->withCount('replies')->orderByDesc('replies_count');
         }
         //withCount gives you a virtual attribute in your model : replies_count
 
 
-
-        if(request()->filled('search')){
+        if (request()->filled('search')) {
             $queryStringValue = request()->query('search');
 
             $topics->where(
-                'title' , 'like'  , '%' . $queryStringValue . '%'
+                'title', 'like', '%' . $queryStringValue . '%'
             );
         }
 
-        $topics = $topics->with(['category' , 'user' , 'latestReply' , 'bookmarks' => fn($query) => $query->where('user_id' , auth()->user()->id)])
+        $topics = $topics->with(['category', 'user', 'latestReply', 'bookmarks' => fn($query) => $query->where('user_id', auth()->user()->id)])
             ->withCount('replies')->latest()->paginate(10)->withQueryString();
 
         $categories = Category::all();
 
-        return view('topics.index' , ['topics' => $topics, 'categories' => $categories]);
+        return view('topics.index', ['topics' => $topics, 'categories' => $categories]);
     }
 
     /**
@@ -58,7 +57,7 @@ class TopicController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('topics.create' , ['categories' => $categories]);
+        return view('topics.create', ['categories' => $categories]);
     }
 
     /**
@@ -68,8 +67,8 @@ class TopicController extends Controller
     {
         //validate
         request()->validate([
-            'title' => ['required', 'string', 'max:255' , 'unique:topics,title'],
-            'description' =>  ['required', 'string', 'min:10'],
+            'title' => ['required', 'string', 'max:255', 'unique:topics,title'],
+            'description' => ['required', 'string', 'min:10'],
             'category_id' => ['required'],
         ]);
 
@@ -106,13 +105,13 @@ class TopicController extends Controller
             }
         }
 
-        $topic->load(['category' , 'user'])->loadCount('replies');
+        $topic->load(['category', 'user'])->loadCount('replies');
         //when you have the model you load the relations into it (for eager loading)
         //when you don't have it you query to it
 
-        $replies  = $topic->replies()->with('user')->latest()->get();
+        $replies = $topic->replies()->with('user')->latest()->get();
 
-        return view('topics.show' , ['topic' => $topic , 'replies' => $replies]);
+        return view('topics.show', ['topic' => $topic, 'replies' => $replies]);
     }
 
     /**
@@ -122,7 +121,7 @@ class TopicController extends Controller
     {
         $categories = Category::all();
 
-        return view('topics.edit' , ['topic' => $topic , 'categories' => $categories]);
+        return view('topics.edit', ['topic' => $topic, 'categories' => $categories]);
     }
 
     /**
@@ -131,8 +130,8 @@ class TopicController extends Controller
     public function update(Topic $topic)
     {
         request()->validate([
-            'title' => ['required', 'string', 'max:255' , 'unique:topics,title'],
-            'description' =>  ['required', 'string', 'min:10'],
+            'title' => ['required', 'string', 'max:255', 'unique:topics,title'],
+            'description' => ['required', 'string', 'min:10'],
             'category_id' => ['required'],
         ]);
 
@@ -143,7 +142,7 @@ class TopicController extends Controller
             'category_id' => request()->category_id,
         ]);
 
-        return redirect()->route('topics.show', ['topic' => $topic ]);
+        return redirect()->route('topics.show', ['topic' => $topic]);
     }
 
     /**
@@ -151,8 +150,13 @@ class TopicController extends Controller
      */
     public function destroy(Topic $topic)
     {
-    $topic->delete();
-    return redirect()->route('topics.index');
+        $user = $topic->user;
+        $topic->delete();
+        if(url()->previous() == route('admin.users.show' , $user)){
+            return redirect()->route('admin.users.show' , $user);
+        }
+
+        return redirect()->route('topics.index');
     }
 
 }

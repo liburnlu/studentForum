@@ -13,7 +13,7 @@ class AdminDashboardController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function index(Request $request)
     {
         $stats = [
             'users' => User::count(),
@@ -24,4 +24,11 @@ class AdminDashboardController extends Controller
 
         return view('admin.index' , ['stats' => $stats]);
     }
+
+    public function destroyTopic(Topic $topic){
+
+        $topic->delete();
+
+    }
+
 }

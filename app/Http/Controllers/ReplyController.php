@@ -68,8 +68,13 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
+        $user = $reply->user;
+
         $reply->delete();
 
+        if(url()->previous() == route('admin.users.show' , $user)){
+            return redirect()->route('admin.users.show' , $user);
+        }
         return redirect()->route('topics.show' , ['topic' => $reply->topic->id]);
     }
 }

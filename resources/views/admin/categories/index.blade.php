@@ -11,7 +11,7 @@
         </div>
     </x-slot>
 
-    <div class="flex min-h-screen bg-gray-50">
+    <div class="flex min-h-screen bg-gray-100">
         {{-- Sidebar --}}
         @include('layouts.admin-sidebar')
 
@@ -56,7 +56,7 @@
                                     {{-- Name --}}
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('admin.categories.show', $category) }}"
-                                           class="font-medium text-gray-900 hover:text-indigo-600">
+                                           class="hover:underline">
                                             {{ $category->name }}
                                         </a>
                                     </td>

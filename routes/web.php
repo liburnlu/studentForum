@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\AdminPanel;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -27,8 +26,11 @@ require __DIR__ . '/auth.php';
 
 
 
-Route::get('/admin', [AdminDashboardController::class , '__invoke'])->middleware(['auth', 'verified'])->name('admin');
-
+Route::controller(AdminDashboardController::class)->group(function () {
+    Route::get('/admin', 'index')->middleware(['auth', 'verified'])->name('admin');
+    Route::delete('/admin/topics/{topic}', 'destroyTopic')->middleware(['auth', 'verified'])->name('admin.topics.destroy');
+    Route::delete('/admin/replies/{reply}', 'destroyReply')->middleware(['auth', 'verified'])->name('admin.replies.destroy');
+});
 
 
 
@@ -50,7 +52,6 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('/dashboard', 'index')->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/dashboard/topics', 'topics')->middleware(['auth', 'verified'])->name('dashboard.topics');
     Route::get('/dashboard/replies', 'replies')->middleware(['auth', 'verified'])->name('dashboard.replies');
-
 });
 
 

@@ -26,16 +26,5 @@
             Categories
         </a>
 
-        <a href="/"
-           class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium
-           {{ request()->routeIs('admin.topics*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100' }}">
-            Topics
-        </a>
-
-        <a href="/"
-           class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium
-           {{ request()->routeIs('admin.replies*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100' }}">
-            Replies
-        </a>
     </nav>
 </aside>

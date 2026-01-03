@@ -54,6 +54,7 @@
                             <th class="px-6 py-3 text-left">Category</th>
                             <th class="px-6 py-3 text-left">Replies</th>
                             <th class="px-6 py-3 text-left">Created</th>
+                            <th class="px-6 py-3 text-right">Actions</th>
                         </tr>
                         </thead>
                         <tbody class="divide-y">
@@ -76,6 +77,40 @@
                                 </td>
                                 <td class="px-6 py-4 text-gray-500">
                                     {{ $topic->created_at->diffForHumans() }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <x-danger-button
+                                        x-data
+                                        x-on:click.prevent="$dispatch('open-modal', 'confirm-topic-deletion-{{ $topic->id }}')">
+                                        Delete
+                                    </x-danger-button>
+                                    <x-modal name="confirm-topic-deletion-{{ $topic->id }}" focusable>
+                                        <form method="POST"
+                                              action="{{ route('topics.destroy', $topic) }}"
+                                              class="p-6 text-left">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <h2 class="text-lg font-semibold text-gray-900">
+                                                Delete topic?
+                                            </h2>
+
+                                            <p class="mt-2 text-sm text-gray-600">
+                                                This will permanently delete the topic and all its replies.
+                                            </p>
+
+                                            <div class="mt-6 flex justify-end gap-3">
+                                                <x-secondary-button
+                                                    x-on:click="$dispatch('close')">
+                                                    Cancel
+                                                </x-secondary-button>
+
+                                                <x-danger-button>
+                                                    Delete
+                                                </x-danger-button>
+                                            </div>
+                                        </form>
+                                    </x-modal>
                                 </td>
                             </tr>
                         @empty
@@ -107,6 +142,7 @@
                             <th class="px-6 py-3 text-left">Reply</th>
                             <th class="px-6 py-3 text-left">Topic</th>
                             <th class="px-6 py-3 text-left">Created</th>
+                            <th class="px-6 py-3 text-right">Actions</th>
                         </tr>
                         </thead>
                         <tbody class="divide-y">
@@ -123,6 +159,40 @@
                                 </td>
                                 <td class="px-6 py-4 text-gray-500">
                                     {{ $reply->created_at->diffForHumans() }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <x-danger-button
+                                        x-data
+                                        x-on:click.prevent="$dispatch('open-modal', 'confirm-reply-deletion-{{ $reply->id }}')">
+                                        Delete
+                                    </x-danger-button>
+                                    <x-modal name="confirm-reply-deletion-{{ $reply->id }}" focusable>
+                                        <form method="POST"
+                                              action="{{ route('replies.destroy', $reply) }}"
+                                              class="p-6 text-left">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <h2 class="text-lg font-semibold text-gray-900">
+                                                Delete reply?
+                                            </h2>
+
+                                            <p class="mt-2 text-sm text-gray-600">
+                                                This will permanently delete the reply.
+                                            </p>
+
+                                            <div class="mt-6 flex justify-end gap-3">
+                                                <x-secondary-button
+                                                    x-on:click="$dispatch('close')">
+                                                    Cancel
+                                                </x-secondary-button>
+
+                                                <x-danger-button>
+                                                    Delete
+                                                </x-danger-button>
+                                            </div>
+                                        </form>
+                                    </x-modal>
                                 </td>
                             </tr>
                         @empty
@@ -154,6 +224,8 @@
                             <th class="px-6 py-3 text-left">Title</th>
                             <th class="px-6 py-3 text-left">Category</th>
                             <th class="px-6 py-3 text-left">Bookmarked</th>
+                            <th class="px-6 py-3 text-right">Actions</th>
+
                         </tr>
                         </thead>
                         <tbody class="divide-y">
@@ -174,6 +246,28 @@
                                 <td class="px-6 py-4 text-gray-500">
                                     {{ $bookmark->created_at->diffForHumans() }}
                                 </td>
+                                <td class="px-6 py-4 text-center">
+                                    <form method="POST"
+                                          action="{{ route('bookmarks.toggle') }}">
+                                        @csrf
+
+                                        <input type="hidden" name="topic_id" value="{{ $bookmark->topic->id }}">
+
+                                        <button type="submit"
+                                                title="Remove bookmark"
+                                                class="group transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 fill="currentColor"
+                                                 viewBox="0 0 24 24"
+                                                 class="w-5 h-5 text-red-500 group-hover:scale-110 transition">
+                                                <path d="M12 21s-6.716-4.418-9.428-7.143C-1.19 10.29 1.01 4.5 6.225 4.5c2.215 0 3.775 1.45 4.775 2.757C12 5.95 13.56 4.5 15.775 4.5c5.215 0 7.415 5.79 3.653 9.357C18.716 16.582 12 21 12 21z"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </td>
+
+
+
                             </tr>
                         @empty
                             <tr>
