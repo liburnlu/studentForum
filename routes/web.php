@@ -28,8 +28,6 @@ require __DIR__ . '/auth.php';
 
 Route::controller(AdminDashboardController::class)->group(function () {
     Route::get('/admin', 'index')->middleware(['auth', 'verified'])->name('admin');
-    Route::delete('/admin/topics/{topic}', 'destroyTopic')->middleware(['auth', 'verified'])->name('admin.topics.destroy');
-    Route::delete('/admin/replies/{reply}', 'destroyReply')->middleware(['auth', 'verified'])->name('admin.replies.destroy');
 });
 
 

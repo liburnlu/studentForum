@@ -25,10 +25,4 @@ class AdminDashboardController extends Controller
         return view('admin.index' , ['stats' => $stats]);
     }
 
-    public function destroyTopic(Topic $topic){
-
-        $topic->delete();
-
-    }
-
 }
