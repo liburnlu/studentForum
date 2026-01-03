@@ -43,14 +43,14 @@ class DashboardController extends Controller
     public function topics(){
 
 
-        $topics = auth()->user()->topics()->withCount('replies')->latest()->paginate(10);
+        $topics = auth()->user()->topics()->withCount('replies')->latest()->paginate(15);
 
         return view('dashboard.topics' , ['topics' => $topics]);
     }
 
     public function replies(){
 
-        $replies = auth()->user()->replies()->with('topic')->latest()->paginate(10);
+        $replies = auth()->user()->replies()->with('topic')->latest()->paginate(15);
 
         return view('dashboard.replies' , ['replies' => $replies]);
     }

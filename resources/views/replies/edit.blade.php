@@ -11,6 +11,10 @@
                 @csrf
                 @method('PATCH')
 
+
+                <input type="hidden" name="redirect" value="{{ request()->query('redirect') }}">
+
+
                 <!-- Reply -->
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-2">

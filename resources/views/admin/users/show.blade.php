@@ -1,13 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between w-full">
-            <div>
-                <h2 class="text-xl font-semibold text-gray-800">
-                    {{ $user->name }}
-                </h2>
-                <p class="text-sm text-gray-500">
-                    {{ $user->email }}
-                </p>
+            <div class="flex items-center gap-4">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-indigo-50">
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-800">
+                        {{ $user->name }}
+                    </h2>
+                    <p class="text-sm text-gray-600 flex items-center gap-1.5 mt-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        {{ $user->email }}
+                    </p>
+                </div>
             </div>
 
             <x-edit-button href="{{ route('admin.users.edit', $user) }}">
@@ -16,12 +24,17 @@
         </div>
     </x-slot>
 
-    <div class="flex min-h-screen bg-gray-100">
+    <div class="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {{-- Sidebar --}}
         @include('layouts.admin-sidebar')
 
         {{-- Main content --}}
-        <main class="flex-1 p-6 space-y-8">
+        <main class="flex-1 p-6 lg:p-8 space-y-8">
+
+            @if(session('success'))
+                <x-success-toast></x-success-toast>
+            @endif
+
             <div class="max-w-7xl mx-auto space-y-8">
 
                 {{-- User Stats --}}
@@ -40,54 +53,53 @@
                 </div>
 
                 {{-- Topics Table --}}
-                <div class="bg-white rounded-xl border shadow-sm">
-                    <div class="p-6 border-b">
-                        <h3 class="text-lg font-semibold text-gray-800">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-900">
                             Topics
                         </h3>
                     </div>
 
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 text-gray-600">
-                        <tr>
-                            <th class="px-6 py-3 text-left">Title</th>
-                            <th class="px-6 py-3 text-left">Category</th>
-                            <th class="px-6 py-3 text-left">Replies</th>
-                            <th class="px-6 py-3 text-left">Created</th>
-                            <th class="px-6 py-3 text-right">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody class="divide-y">
+                    <div class="divide-y divide-gray-200">
                         @forelse($topics as $topic)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 font-medium text-gray-900">
-                                    <a href="{{ route('topics.show', $topic) }}"
-                                       class="hover:underline">
-                                        {{ $topic->title }}
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600">
-                                    <a href="{{route('admin.categories.show' , $topic->category)}}"
-                                    class="hover:underline">
-                                    {{ $topic->category->name ?? '—' }}
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600">
-                                    {{ $topic->replies_count ?? 0 }}
-                                </td>
-                                <td class="px-6 py-4 text-gray-500">
-                                    {{ $topic->created_at->diffForHumans() }}
-                                </td>
-                                <td class="px-6 py-4 text-right">
+                            <div class="px-6 py-4 hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center justify-between gap-4">
+                                    <div class="flex-1 min-w-0">
+                                        <a href="{{ route('topics.show', $topic) }}" class="group">
+                                            <h4 class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                                                {{ $topic->title }}
+                                            </h4>
+                                        </a>
+                                        <div class="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                                            <a href="{{ route('admin.categories.show', $topic->category) }}" class="flex items-center gap-1 hover:text-indigo-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                                </svg>
+                                                <span class="font-medium">{{ $topic->category->name ?? '—' }}</span>
+                                            </a>
+                                            <span class="text-gray-300">•</span>
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                                </svg>
+                                                <span class="font-medium text-blue-700">{{ $topic->replies_count ?? 0 }}</span>
+                                            </div>
+                                            <span class="text-gray-300">•</span>
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span>{{ $topic->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <x-danger-button
                                         x-data
                                         x-on:click.prevent="$dispatch('open-modal', 'confirm-topic-deletion-{{ $topic->id }}')">
                                         Delete
                                     </x-danger-button>
                                     <x-modal name="confirm-topic-deletion-{{ $topic->id }}" focusable>
-                                        <form method="POST"
-                                              action="{{ route('topics.destroy', $topic) }}"
-                                              class="p-6 text-left">
+                                        <form method="POST" action="{{ route('topics.destroy', $topic) }}" class="p-6 text-left">
                                             @csrf
                                             @method('DELETE')
 
@@ -100,8 +112,7 @@
                                             </p>
 
                                             <div class="mt-6 flex justify-end gap-3">
-                                                <x-secondary-button
-                                                    x-on:click="$dispatch('close')">
+                                                <x-secondary-button x-on:click="$dispatch('close')">
                                                     Cancel
                                                 </x-secondary-button>
 
@@ -111,65 +122,62 @@
                                             </div>
                                         </form>
                                     </x-modal>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         @empty
-                            <tr>
-                                <td colspan="4" class="px-6 py-6 text-center text-gray-500">
-                                    No topics created.
-                                </td>
-                            </tr>
+                            <div class="px-6 py-12 text-center text-gray-500">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                </svg>
+                                <p class="mt-2 text-sm">No topics created.</p>
+                            </div>
                         @endforelse
-                        </tbody>
-                    </table>
-
-                    <div class="p-4">
-                        {{ $topics->links() }}
                     </div>
+
+                    @if($topics->hasPages())
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            {{ $topics->links() }}
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Replies Table --}}
-                <div class="bg-white rounded-xl border shadow-sm">
-                    <div class="p-6 border-b">
-                        <h3 class="text-lg font-semibold text-gray-800">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-900">
                             Replies
                         </h3>
                     </div>
 
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 text-gray-600">
-                        <tr>
-                            <th class="px-6 py-3 text-left">Reply</th>
-                            <th class="px-6 py-3 text-left">Topic</th>
-                            <th class="px-6 py-3 text-left">Created</th>
-                            <th class="px-6 py-3 text-right">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody class="divide-y">
+                    <div class="divide-y divide-gray-200">
                         @forelse($replies as $reply)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-gray-900 line-clamp-1">
-                                    {{ Str::limit($reply->description, 60) }}
-                                </td>
-                                <td class="px-6 py-4 text-gray-600">
-                                    <a href="{{ route('topics.show', $reply->topic) }}"
-                                       class="hover:underline">
-                                        {{ $reply->topic->title }}
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 text-gray-500">
-                                    {{ $reply->created_at->diffForHumans() }}
-                                </td>
-                                <td class="px-6 py-4 text-right">
+                            <div class="px-6 py-4 hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center justify-between gap-4">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-700 line-clamp-2 leading-relaxed">
+                                            {{ Str::limit($reply->description, 150) }}
+                                        </p>
+                                        <div class="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                                            <span>replied to</span>
+                                            <a href="{{ route('topics.show', $reply->topic) }}" class="font-semibold text-indigo-600 hover:text-indigo-700 line-clamp-1">
+                                                {{ $reply->topic->title }}
+                                            </a>
+                                            <span class="text-gray-300">•</span>
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span>{{ $reply->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <x-danger-button
                                         x-data
                                         x-on:click.prevent="$dispatch('open-modal', 'confirm-reply-deletion-{{ $reply->id }}')">
                                         Delete
                                     </x-danger-button>
                                     <x-modal name="confirm-reply-deletion-{{ $reply->id }}" focusable>
-                                        <form method="POST"
-                                              action="{{ route('replies.destroy', $reply) }}"
-                                              class="p-6 text-left">
+                                        <form method="POST" action="{{ route('replies.destroy', $reply) }}" class="p-6 text-left">
                                             @csrf
                                             @method('DELETE')
 
@@ -182,8 +190,7 @@
                                             </p>
 
                                             <div class="mt-6 flex justify-end gap-3">
-                                                <x-secondary-button
-                                                    x-on:click="$dispatch('close')">
+                                                <x-secondary-button x-on:click="$dispatch('close')">
                                                     Cancel
                                                 </x-secondary-button>
 
@@ -193,95 +200,83 @@
                                             </div>
                                         </form>
                                     </x-modal>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         @empty
-                            <tr>
-                                <td colspan="3" class="px-6 py-6 text-center text-gray-500">
-                                    No replies yet.
-                                </td>
-                            </tr>
+                            <div class="px-6 py-12 text-center text-gray-500">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                                <p class="mt-2 text-sm">No replies yet.</p>
+                            </div>
                         @endforelse
-                        </tbody>
-                    </table>
-
-                    <div class="p-4">
-                        {{ $replies->links() }}
                     </div>
+
+                    @if($replies->hasPages())
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            {{ $replies->links() }}
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Bookmarks Table --}}
-                <div class="bg-white rounded-xl border shadow-sm">
-                    <div class="p-6 border-b">
-                        <h3 class="text-lg font-semibold text-gray-800">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-900">
                             Bookmarked Topics
                         </h3>
                     </div>
 
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 text-gray-600">
-                        <tr>
-                            <th class="px-6 py-3 text-left">Title</th>
-                            <th class="px-6 py-3 text-left">Category</th>
-                            <th class="px-6 py-3 text-left">Bookmarked</th>
-                            <th class="px-6 py-3 text-right">Actions</th>
-
-                        </tr>
-                        </thead>
-                        <tbody class="divide-y">
+                    <div class="divide-y divide-gray-200">
                         @forelse($bookmarks as $bookmark)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 font-medium text-gray-900">
-                                    <a href="{{ route('topics.show', $bookmark->topic) }}"
-                                       class="hover:underline">
-                                        {{ $bookmark->topic->title }}
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600">
-                                    <a href="{{route('admin.categories.show' , $bookmark->topic->category)}}"
-                                    class="hover:underline">
-                                    {{ $bookmark->topic->category->name ?? '—' }}
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 text-gray-500">
-                                    {{ $bookmark->created_at->diffForHumans() }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <form method="POST"
-                                          action="{{ route('bookmarks.toggle') }}">
+                            <div class="px-6 py-4 hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center justify-between gap-4">
+                                    <div class="flex-1 min-w-0">
+                                        <a href="{{ route('topics.show', $bookmark->topic) }}" class="group">
+                                            <h4 class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                                                {{ $bookmark->topic->title }}
+                                            </h4>
+                                        </a>
+                                        <div class="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                                            <a href="{{ route('admin.categories.show', $bookmark->topic->category) }}" class="flex items-center gap-1 hover:text-indigo-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                                </svg>
+                                                <span class="font-medium">{{ $bookmark->topic->category->name ?? '—' }}</span>
+                                            </a>
+                                            <span class="text-gray-300">•</span>
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span>Bookmarked {{ $bookmark->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <form method="POST" action="{{ route('bookmarks.toggle') }}">
                                         @csrf
-
                                         <input type="hidden" name="topic_id" value="{{ $bookmark->topic->id }}">
-
-                                        <button type="submit"
-                                                title="Remove bookmark"
-                                                class="group transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                 fill="currentColor"
-                                                 viewBox="0 0 24 24"
-                                                 class="w-5 h-5 text-red-500 group-hover:scale-110 transition">
-                                                <path d="M12 21s-6.716-4.418-9.428-7.143C-1.19 10.29 1.01 4.5 6.225 4.5c2.215 0 3.775 1.45 4.775 2.757C12 5.95 13.56 4.5 15.775 4.5c5.215 0 7.415 5.79 3.653 9.357C18.716 16.582 12 21 12 21z"/>
-                                            </svg>
+                                        <button type="submit" title="Remove bookmark" class="transform hover:scale-110 transition-all duration-200 text-2xl p-1 rounded-full hover:bg-red-50 text-red-500">
+                                            ❤️
                                         </button>
                                     </form>
-                                </td>
-
-
-
-                            </tr>
+                                </div>
+                            </div>
                         @empty
-                            <tr>
-                                <td colspan="3" class="px-6 py-6 text-center text-gray-500">
-                                    No bookmarks yet.
-                                </td>
-                            </tr>
+                            <div class="px-6 py-12 text-center text-gray-500">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                </svg>
+                                <p class="mt-2 text-sm">No bookmarks yet.</p>
+                            </div>
                         @endforelse
-                        </tbody>
-                    </table>
-
-                    <div class="p-4">
-                        {{ $bookmarks->links() }}
                     </div>
+
+                    @if($bookmarks->hasPages())
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            {{ $bookmarks->links() }}
+                        </div>
+                    @endif
                 </div>
 
             </div>

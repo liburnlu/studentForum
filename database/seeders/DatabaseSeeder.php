@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory(10)->create();
         Category::factory(10)->create();
-        Topic::factory(20)->create();
+        Topic::factory(25)->create();
         Reply::factory(40)->create();
 
     }

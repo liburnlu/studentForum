@@ -11,17 +11,38 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 bg-gradient-to-b from-gray-50 to-gray-100">
+
+
+        <!-- Success Toast -->
+        @if(session('success'))
+            <x-success-toast></x-success-toast>
+        @endif
+
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <!-- Topic Header Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                 <div class="p-6 sm:p-8">
-                    <!-- Category Badge -->
-                    <div class="mb-4">
+                    <!-- Category Badge & Bookmark -->
+                    <div class="mb-4 flex justify-between items-start">
                         <span
                             class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-800">
                             {{ $topic->category->name }}
                         </span>
+
+                        @auth
+                            <!-- Bookmark Heart -->
+                            <form method="POST" action="/bookmarks" class="relative">
+                                @csrf
+                                <input type="hidden" name="topic_id" value="{{ $topic->id }}">
+
+                                <button type="submit"
+                                        class="transform hover:scale-110 transition-all duration-200 text-2xl p-1 rounded-full hover:bg-red-50
+                                    {{ $topic->bookmarks->isNotEmpty() ? 'text-red-500' : 'text-gray-300 hover:text-red-500' }}">
+                                    {{ $topic->bookmarks->isNotEmpty() ? '❤️' : '🤍' }}
+                                </button>
+                            </form>
+                        @endauth
                     </div>
 
                     <!-- Title -->
@@ -94,45 +115,45 @@
 
 
                     @if(auth()->user()->id === $topic->user_id)
-                    <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200 ">
+                        <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200 ">
 
 
-                        <x-edit-button href="{{route('topics.edit' , $topic)}}">
-                            Edit Topic
-                        </x-edit-button>
+                            <x-edit-button href="{{route('topics.edit' , $topic)}}">
+                                Edit Topic
+                            </x-edit-button>
 
 
-                        <x-danger-button
-                            x-data=""
-                            x-on:click="$dispatch('open-modal', 'confirm-topic-deletion-{{ $topic->id }}')"
-                        >{{ __('Delete Topic') }}
-                        </x-danger-button>
+                            <x-danger-button
+                                x-data=""
+                                x-on:click="$dispatch('open-modal', 'confirm-topic-deletion-{{ $topic->id }}')"
+                            >{{ __('Delete Topic') }}
+                            </x-danger-button>
 
-                        <x-modal name="confirm-topic-deletion-{{ $topic->id }}" focusable>
-                            <form method="post" action="{{ route('topics.destroy' , $topic) }}" class="p-6">
-                                @csrf
-                                @method('delete')
+                            <x-modal name="confirm-topic-deletion-{{ $topic->id }}" focusable>
+                                <form method="post" action="{{ route('topics.destroy' , $topic) }}" class="p-6">
+                                    @csrf
+                                    @method('delete')
 
-                                <h2 class="text-lg font-medium text-gray-900">
-                                    {{ __('Are you sure you want to delete this topic?') }}
-                                </h2>
+                                    <h2 class="text-lg font-medium text-gray-900">
+                                        {{ __('Are you sure you want to delete this topic?') }}
+                                    </h2>
 
-                                <p class="mt-1 text-sm text-gray-600">
-                                    {{ __('This action will permanently delete the topic and all of its replies.') }}
-                                </p>
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        {{ __('This action will permanently delete the topic and all of its replies.') }}
+                                    </p>
 
-                                <div class="mt-6 flex justify-end">
-                                    <x-secondary-button x-on:click="$dispatch('close')">
-                                        {{ __('Cancel') }}
-                                    </x-secondary-button>
+                                    <div class="mt-6 flex justify-end">
+                                        <x-secondary-button x-on:click="$dispatch('close')">
+                                            {{ __('Cancel') }}
+                                        </x-secondary-button>
 
-                                    <x-danger-button class="ms-3">
-                                        {{ __('Delete Topic') }}
-                                    </x-danger-button>
-                                </div>
-                            </form>
-                        </x-modal>
-                    </div>
+                                        <x-danger-button class="ms-3">
+                                            {{ __('Delete Topic') }}
+                                        </x-danger-button>
+                                    </div>
+                                </form>
+                            </x-modal>
+                        </div>
                     @endif
 
                 </div>
@@ -140,7 +161,7 @@
 
 
             <!-- Replies Section -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                 <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                     <h2 class="text-lg font-semibold text-gray-900">
                         {{ $topic->replies_count}} {{ Str::plural('Reply', $topic->replies_count) }}
@@ -232,7 +253,7 @@
 
             <!-- Reply Form -->
             @auth
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                     <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                         <h3 class="text-lg font-semibold text-gray-900">Add a Reply</h3>
                     </div>

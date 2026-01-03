@@ -26,7 +26,7 @@ class ReplyController extends Controller
             'topic_id' => $topic->id
         ]);
 
-        return redirect()->route('topics.show', $topic);
+        return redirect()->route('topics.show', $topic)->with('success', 'Reply added successfully.');
     }
 
     /**
@@ -60,7 +60,11 @@ class ReplyController extends Controller
             'description' => request()->description,
         ]);
 
-        return redirect()->route('topics.show' , ['topic' => $reply->topic->id]);
+        if (request()->input('redirect') === 'dashboard') {
+            return redirect()->route('dashboard.replies')->with('success', 'Reply updated successfully.');
+        }
+
+        return redirect()->route('topics.show' , ['topic' => $reply->topic->id])->with('success', 'Reply updated successfully.');
     }
 
     /**
@@ -73,8 +77,13 @@ class ReplyController extends Controller
         $reply->delete();
 
         if(url()->previous() == route('admin.users.show' , $user)){
-            return redirect()->route('admin.users.show' , $user);
+            return redirect()->route('admin.users.show' , $user)->with('success', 'Reply deleted successfully.');
         }
-        return redirect()->route('topics.show' , ['topic' => $reply->topic->id]);
+
+
+        if(url()->previous() == route('dashboard.replies' )){
+            return redirect()->route('dashboard.replies' )->with('success', 'Reply deleted successfully.');
+        }
+        return redirect()->route('topics.show' , ['topic' => $reply->topic->id])->with('success', 'Reply deleted successfully.');
     }
 }

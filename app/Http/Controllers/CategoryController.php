@@ -43,13 +43,13 @@ class CategoryController extends Controller
             'slug' => Str::slug($request->name),
         ]);
 
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully');
 
     }
 
     public function show(Category $category){
 
-        $topics = $category->topics()->with(['user' , 'category'])->withCount('replies')->latest()->paginate(7);
+        $topics = $category->topics()->with(['user' , 'category'])->withCount('replies')->latest()->paginate(10);
 
         return view('admin.categories.show', ['category' => $category, 'topics' => $topics]);
     }
@@ -82,7 +82,7 @@ class CategoryController extends Controller
             'slug' => Str::slug($request->name)
         ]);
 
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully');
     }
 
     /**
@@ -91,6 +91,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully');
     }
 }

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
-use Illuminate\Http\Request;
 
 class BookmarkController extends Controller
 {
     public function index(){
 
-        $bookmarks = auth()->user()->bookmarks()->with('topic')->get();
+        $bookmarks = auth()->user()->bookmarks()->with([
+            'topic' => fn($query) => $query->withCount('replies')->with(['user' , 'category'])
+        ])->get();
 
         return view('bookmarks.index' , ['bookmarks' => $bookmarks]);
     }
@@ -24,6 +25,7 @@ class BookmarkController extends Controller
 
         if($bookmark){
             $bookmark->delete();
+            return redirect()->back()->with('success' , 'Topic removed from bookmarks.');
         }
 
         else{
@@ -33,7 +35,7 @@ class BookmarkController extends Controller
             ]);
         }
 
-        return back();
+        return redirect()->back()->with('success' , 'Topic bookmarked successfully.');
 
     }
 }

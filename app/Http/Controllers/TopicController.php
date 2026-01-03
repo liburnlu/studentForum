@@ -48,7 +48,7 @@ class TopicController extends Controller
 
         $categories = Category::all();
 
-        return view('topics.index', ['topics' => $topics, 'categories' => $categories]);
+        return view('topics.index', ['topics' => $topics, 'categories' => $categories ]);
     }
 
     /**
@@ -81,7 +81,7 @@ class TopicController extends Controller
             'category_id' => request()->category_id,
         ]);
 
-        return redirect()->route('topics.index');
+        return redirect()->route('topics.index')->with('success', 'Topic created successfully.');
     }
 
     /**
@@ -130,7 +130,7 @@ class TopicController extends Controller
     public function update(Topic $topic)
     {
         request()->validate([
-            'title' => ['required', 'string', 'max:255', 'unique:topics,title'],
+            'title' => ['required', 'string', 'max:255', 'unique:topics,title,' . $topic->id],
             'description' => ['required', 'string', 'min:10'],
             'category_id' => ['required'],
         ]);
@@ -142,7 +142,11 @@ class TopicController extends Controller
             'category_id' => request()->category_id,
         ]);
 
-        return redirect()->route('topics.show', ['topic' => $topic]);
+        if (request()->input('redirect') === 'dashboard') {
+            return redirect()->route('dashboard.topics')->with('success', 'Topic updated successfully.');
+        }
+
+        return redirect()->route('topics.show', ['topic' => $topic])->with('success', 'Topic updated successfully.');
     }
 
     /**
@@ -152,11 +156,17 @@ class TopicController extends Controller
     {
         $user = $topic->user;
         $topic->delete();
+
         if(url()->previous() == route('admin.users.show' , $user)){
-            return redirect()->route('admin.users.show' , $user);
+            return redirect()->route('admin.users.show' , $user)->with('success', 'Topic deleted successfully.');
         }
 
-        return redirect()->route('topics.index');
+        if(url()->previous() == route('dashboard.topics')){
+
+            return redirect()->route('dashboard.topics')->with('success', 'Topic deleted successfully.');
+        }
+
+        return redirect()->route('topics.index')->with('success', 'Topic deleted successfully.');
     }
 
 }

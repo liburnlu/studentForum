@@ -63,5 +63,9 @@ class User extends Authenticatable
         return $this->hasMany(Bookmark::class);
     }
 
+    public function isAdmin(){
+        return $this->role === 'admin';
+    }
+
 
 }

@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="flex h-screen bg-gray-100">
+    <div class="flex h-screen  bg-gradient-to-b from-gray-50 to-gray-100">
         {{-- Sidebar --}}
         @include('layouts.admin-sidebar')
 
