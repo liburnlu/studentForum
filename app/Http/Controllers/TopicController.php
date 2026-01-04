@@ -43,7 +43,7 @@ class TopicController extends Controller
             );
         }
 
-        $topics = $topics->with(['category', 'user', 'latestReply', 'bookmarks' => fn($query) => $query->where('user_id', auth()->user()->id)])
+        $topics = $topics->with(['category', 'user', 'latestReply', 'bookmarks'])
             ->withCount('replies')->latest()->paginate(10)->withQueryString();
 
         $categories = Category::all();

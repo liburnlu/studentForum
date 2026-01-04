@@ -10,7 +10,7 @@ class BookmarkController extends Controller
 
         $bookmarks = auth()->user()->bookmarks()->with([
             'topic' => fn($query) => $query->withCount('replies')->with(['user' , 'category'])
-        ])->get();
+        ])->latest()->paginate(10);
 
         return view('bookmarks.index' , ['bookmarks' => $bookmarks]);
     }

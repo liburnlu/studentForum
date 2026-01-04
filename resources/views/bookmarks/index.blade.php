@@ -109,6 +109,13 @@
                             </div>
                         @endforeach
                     </div>
+
+                    {{-- Pagination --}}
+                    @if($bookmarks->hasPages())
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            {{ $bookmarks->links() }}
+                        </div>
+                    @endif
                 </div>
             @endif
         </div>

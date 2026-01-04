@@ -44,7 +44,8 @@
             </x-primary-button>
         </div>
 
-        <div class="text-sm text-gray-600  rounded-md ">
+
+        <div class="text-sm text-gray-600  rounded-md mt-4">
             Don't have an account?
             <a href="{{route('register')}}" class="underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
                Register

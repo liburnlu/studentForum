@@ -10,11 +10,6 @@ use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('splash');
-})->middleware('guest')->name('splash');
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -24,12 +19,14 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
+Route::get('/', function () {
+    return view('splash');
+})->middleware('guest')->name('splash');
+
 
 Route::controller(AdminDashboardController::class)->group(function () {
     Route::get('/admin', 'index')->middleware(['auth', 'verified'])->name('admin');
 });
-
-
 
 
 Route::controller(ReplyController::class)->group(function () {
@@ -53,7 +50,7 @@ Route::controller(DashboardController::class)->group(function () {
 
 
 Route::controller(TopicController::class)->group(function () {
-    Route::get('/topics', 'index')->middleware('auth')->name('topics.index');
+    Route::get('/topics', 'index')->name('topics.index');
     Route::get('/topics/create', 'create')->name('topics.create');
     Route::post('/topics', 'store')->name('topics.store');
     Route::get('/topics/{topic}/edit', 'edit')->name('topics.edit');
@@ -75,8 +72,8 @@ Route::controller(CategoryController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/admin/users', 'index')->middleware(['auth', 'verified'])->name('admin.users.index');
-    Route::get('/admin/users/{user}/edit' , 'edit')->middleware(['auth', 'verified'])->name('admin.users.edit');
-    Route::patch('admin/users/{user}' , 'update')->middleware(['auth', 'verified'])->name('admin.users.update');
+    Route::get('/admin/users/{user}/edit', 'edit')->middleware(['auth', 'verified'])->name('admin.users.edit');
+    Route::patch('admin/users/{user}', 'update')->middleware(['auth', 'verified'])->name('admin.users.update');
     Route::delete('/admin/users/{user}', 'destroy')->middleware(['auth', 'verified'])->name('admin.users.destroy');
     Route::get('/admin/users/{user}', 'show')->middleware(['auth', 'verified'])->name('admin.users.show');
 });
