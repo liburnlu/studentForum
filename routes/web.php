@@ -10,13 +10,6 @@ use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__ . '/auth.php';
 
 
 Route::get('/', function () {
@@ -24,9 +17,44 @@ Route::get('/', function () {
 })->middleware('guest')->name('splash');
 
 
-Route::controller(AdminDashboardController::class)->group(function () {
-    Route::get('/admin', 'index')->middleware(['auth', 'verified'])->name('admin');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
+
+
+Route::middleware(['auth' , 'can:view-admin-panel'])->group(function () {
+
+    Route::controller(AdminDashboardController::class)->group(function () {
+        Route::get('/admin', 'index')->name('admin');
+    });
+
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/admin/categories', 'index')->name('admin.categories.index');
+        Route::get('/admin/categories/create', 'create')->name('admin.categories.create');
+        Route::post('/admin/categories', 'store')->name('admin.categories.store');
+        Route::get('/admin/categories/{category:id}/edit', 'edit')->name('admin.categories.edit');
+        Route::patch('/admin/categories/{category}', 'update')->name('admin.categories.update');
+        Route::delete('/admin/categories/{category}', 'destroy')->name('admin.categories.destroy');
+        Route::get('/admin/categories/{category}', 'show')->name('admin.categories.show');
+    });
+
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/admin/users', 'index')->name('admin.users.index');
+        Route::get('/admin/users/{user}/edit', 'edit')->name('admin.users.edit');
+        Route::patch('admin/users/{user}', 'update')->name('admin.users.update');
+        Route::delete('/admin/users/{user}', 'destroy')->name('admin.users.destroy');
+        Route::get('/admin/users/{user}', 'show')->name('admin.users.show');
+    });
+
+});
+
+
+
 
 
 Route::controller(ReplyController::class)->group(function () {
@@ -60,22 +88,8 @@ Route::controller(TopicController::class)->group(function () {
 
 });
 
-Route::controller(CategoryController::class)->group(function () {
-    Route::get('/admin/categories', 'index')->middleware(['auth', 'verified'])->name('admin.categories.index');
-    Route::get('/admin/categories/create', 'create')->middleware(['auth', 'verified'])->name('admin.categories.create');
-    Route::post('/admin/categories', 'store')->middleware(['auth', 'verified'])->name('admin.categories.store');
-    Route::get('/admin/categories/{category:id}/edit', 'edit')->middleware(['auth', 'verified'])->name('admin.categories.edit');
-    Route::patch('/admin/categories/{category}', 'update')->middleware(['auth', 'verified'])->name('admin.categories.update');
-    Route::delete('/admin/categories/{category}', 'destroy')->middleware(['auth', 'verified'])->name('admin.categories.destroy');
-    Route::get('/admin/categories/{category}', 'show')->middleware(['auth', 'verified'])->name('admin.categories.show');
-});
 
-Route::controller(UserController::class)->group(function () {
-    Route::get('/admin/users', 'index')->middleware(['auth', 'verified'])->name('admin.users.index');
-    Route::get('/admin/users/{user}/edit', 'edit')->middleware(['auth', 'verified'])->name('admin.users.edit');
-    Route::patch('admin/users/{user}', 'update')->middleware(['auth', 'verified'])->name('admin.users.update');
-    Route::delete('/admin/users/{user}', 'destroy')->middleware(['auth', 'verified'])->name('admin.users.destroy');
-    Route::get('/admin/users/{user}', 'show')->middleware(['auth', 'verified'])->name('admin.users.show');
-});
+require __DIR__ . '/auth.php';
+
 
 
