@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
@@ -15,6 +16,8 @@ Route::get('/', function () {
     return view('splash');
 })->middleware('guest')->name('splash');
 
+Route::get('/contact' , [ContactController::class, 'index'])->name('contact');
+Route::post('/contact' , [ContactController::class, 'store'])->name('contact.store');
 
 
 Route::middleware('auth')->group(function () {
@@ -24,9 +27,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('/profile', 'update')->name('profile.update');
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
-
-
-
 });
 
 
