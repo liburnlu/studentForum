@@ -46,12 +46,14 @@
                             </a>
                         </li>
 
+                        @auth
                         <li>
                             <a href="{{ route('topics.create') }}" class="text-gray-600 transition-colors hover:text-indigo-600 flex items-center gap-2 group">
                                 <span class="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-indigo-600 transition-colors"></span>
                                 Create Topic
                             </a>
                         </li>
+                        @endauth
 
                         <li>
                             <a href="#" class="text-gray-600 transition-colors hover:text-indigo-600 flex items-center gap-2 group">

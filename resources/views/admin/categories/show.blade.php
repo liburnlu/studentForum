@@ -21,6 +21,11 @@
 
         {{-- Main Content --}}
         <main class="flex-1 p-6 lg:p-8">
+
+
+            <!-- Search Bar -->
+            <x-search-bar name="Search topics..." route="admin.categories.show" :resource="$category"></x-search-bar>
+
             <div class="max-w-7xl mx-auto">
                 <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
                     {{-- Table Header --}}

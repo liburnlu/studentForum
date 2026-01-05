@@ -12,7 +12,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::query();
+
+        if(request()->filled('search')){
+            $search = request()->query('search');
+
+            $users->where('name', 'like', '%' . $search . '%');
+        }
+
+        $users = $users->latest()->paginate(10)->withQueryString();
 
         return view('admin.users.index', ['users' => $users]);
     }

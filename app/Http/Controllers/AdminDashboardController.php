@@ -20,9 +20,10 @@ class AdminDashboardController extends Controller
 //        if(!Gate::allows('view-admin-panel')){
 //            abort(403);
 //        }
-          Gate::authorize('view-admin-panel'); 
+          //Gate::authorize('view-admin-panel');
 
         //Gate::allowIf(fn(User $user) => $user->role==='admin'); inline authorization without a dedicated gate
+
 
         $stats = [
             'users' => User::count(),

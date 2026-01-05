@@ -20,6 +20,12 @@
         <!-- Main Content -->
         <main class="flex-1 p-6 lg:p-8">
 
+
+            @if(session('success'))
+                <x-success-toast></x-success-toast>
+            @endif
+
+
             <!-- Stats -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- My Topics -->

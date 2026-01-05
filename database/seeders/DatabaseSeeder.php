@@ -25,6 +25,5 @@ class DatabaseSeeder extends Seeder
         Category::factory(10)->create();
         Topic::factory(25)->create();
         Reply::factory(40)->create();
-
     }
 }

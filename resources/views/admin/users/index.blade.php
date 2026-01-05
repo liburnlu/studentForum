@@ -23,6 +23,9 @@
                 <x-success-toast></x-success-toast>
             @endif
 
+                <!-- Search Bar -->
+                <x-search-bar name="Search users..." route="admin.users.index"></x-search-bar>
+
 
             <div class="max-w-7xl mx-auto">
                 <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
@@ -147,7 +150,7 @@
                     {{-- Pagination --}}
                     @if($users->hasPages())
                         <div class="px-6 py-4 border-t border-gray-100">
-                            {{ $users->links() }}
+                            {{ $users->withQueryString()->links() }}
                         </div>
                     @endif
                 </div>

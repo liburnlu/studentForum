@@ -27,7 +27,7 @@
                 <x-success-toast></x-success-toast>
             @endif
 
-            <div class="max-w-7xl mx-auto">
+                <div class="max-w-7xl mx-auto">
                 <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
                     {{-- Table Header --}}
                     <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 px-6 py-4 border-b border-indigo-200">

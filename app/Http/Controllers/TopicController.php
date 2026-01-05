@@ -7,6 +7,7 @@ use App\Models\Reply;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use function Laravel\Prompts\table;
 
@@ -43,8 +44,12 @@ class TopicController extends Controller
             );
         }
 
-        $topics = $topics->with(['category', 'user', 'latestReply', 'bookmarks'])
+        $topics = $topics->with(['category', 'user', 'latestReply'])
+            ->when(auth()->check(), function ($query) {
+                $query->with(['bookmarks' => fn ($q) => $q->where('user_id', auth()->user()->id)]);//get the bookmarks of that authenticated user
+            })
             ->withCount('replies')->latest()->paginate(10)->withQueryString();
+
 
         $categories = Category::all();
 
@@ -56,6 +61,8 @@ class TopicController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Topic::class);
+
         $categories = Category::all();
         return view('topics.create', ['categories' => $categories]);
     }
@@ -65,8 +72,10 @@ class TopicController extends Controller
      */
     public function store()
     {
+        Gate::authorize('create', Topic::class);
+
         //validate
-        request()->validate([
+        $validated = request()->validate([
             'title' => ['required', 'string', 'max:255', 'unique:topics,title'],
             'description' => ['required', 'string', 'min:10'],
             'category_id' => ['required'],
@@ -74,11 +83,11 @@ class TopicController extends Controller
 
         //create resource
         Topic::create([
-            'title' => request()->title,
-            'slug' => Str::slug(request()->title),
-            'description' => request()->description,
+            'title' => $validated['title'],
+            'slug' => Str::slug($validated['title']),
+            'description' => $validated['description'],
             'user_id' => auth()->user()->id,
-            'category_id' => request()->category_id,
+            'category_id' => $validated['category_id'],
         ]);
 
         return redirect()->route('topics.index')->with('success', 'Topic created successfully.');
@@ -105,9 +114,15 @@ class TopicController extends Controller
             }
         }
 
-        $topic->load(['category', 'user'])->loadCount('replies');
+        $topic->load(['category', 'user'])
+            ->loadCount('replies');
         //when you have the model you load the relations into it (for eager loading)
         //when you don't have it you query to it
+
+        if(auth()->check()) {
+            $topic->load(['bookmarks' => fn($query) => $query->where('user_id' , auth()->user()->id)]);
+        }
+
 
         $replies = $topic->replies()->with('user')->latest()->get();
 
@@ -119,6 +134,13 @@ class TopicController extends Controller
      */
     public function edit(Topic $topic)
     {
+
+//        if(request()->user()->cannot('update', $topic)) {
+//            abort(403);
+//        }
+
+        Gate::authorize('update', $topic);
+
         $categories = Category::all();
 
         return view('topics.edit', ['topic' => $topic, 'categories' => $categories]);
@@ -129,17 +151,20 @@ class TopicController extends Controller
      */
     public function update(Topic $topic)
     {
-        request()->validate([
+        Gate::authorize('update', $topic);
+
+
+        $validated = request()->validate([
             'title' => ['required', 'string', 'max:255', 'unique:topics,title,' . $topic->id],
             'description' => ['required', 'string', 'min:10'],
             'category_id' => ['required'],
         ]);
 
         $topic->update([
-            'title' => request()->title,
-            'slug' => Str::slug(request()->title),
-            'description' => request()->description,
-            'category_id' => request()->category_id,
+            'title' => $validated['title'],
+            'slug' => Str::slug($validated['title']),
+            'description' => $validated['description'],
+            'category_id' => $validated['category_id'],
         ]);
 
         if (request()->input('redirect') === 'dashboard') {
@@ -154,6 +179,8 @@ class TopicController extends Controller
      */
     public function destroy(Topic $topic)
     {
+        Gate::authorize('delete', $topic);
+
         $user = $topic->user;
         $topic->delete();
 

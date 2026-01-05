@@ -5,9 +5,12 @@
                 {{$topic->title}}
             </h2>
 
-            <x-button-link href="{{ route('topics.create') }}">
-                Create Topic
-            </x-button-link>
+            @auth
+                <x-button-link href="{{ route('topics.create') }}">
+                    Create Topic
+                </x-button-link>
+            @endauth
+
         </div>
     </x-slot>
 
@@ -113,48 +116,50 @@
 
                     <!-- Action Buttons -->
 
+                    <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200 ">
+                        @auth
 
-                    @if(auth()->user()->id === $topic->user_id)
-                        <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200 ">
+                            @can('update' ,  $topic)
+                                <x-edit-button href="{{route('topics.edit' , $topic)}}">
+                                    Edit Topic
+                                </x-edit-button>
+                            @endcan
 
 
-                            <x-edit-button href="{{route('topics.edit' , $topic)}}">
-                                Edit Topic
-                            </x-edit-button>
+                            @can('delete' , $topic)
+                                <x-danger-button
+                                    x-data=""
+                                    x-on:click="$dispatch('open-modal', 'confirm-topic-deletion-{{ $topic->id }}')"
+                                >{{ __('Delete Topic') }}
+                                </x-danger-button>
 
+                                <x-modal name="confirm-topic-deletion-{{ $topic->id }}" focusable>
+                                    <form method="post" action="{{ route('topics.destroy' , $topic) }}" class="p-6">
+                                        @csrf
+                                        @method('delete')
 
-                            <x-danger-button
-                                x-data=""
-                                x-on:click="$dispatch('open-modal', 'confirm-topic-deletion-{{ $topic->id }}')"
-                            >{{ __('Delete Topic') }}
-                            </x-danger-button>
+                                        <h2 class="text-lg font-medium text-gray-900">
+                                            {{ __('Are you sure you want to delete this topic?') }}
+                                        </h2>
 
-                            <x-modal name="confirm-topic-deletion-{{ $topic->id }}" focusable>
-                                <form method="post" action="{{ route('topics.destroy' , $topic) }}" class="p-6">
-                                    @csrf
-                                    @method('delete')
+                                        <p class="mt-1 text-sm text-gray-600">
+                                            {{ __('This action will permanently delete the topic and all of its replies.') }}
+                                        </p>
 
-                                    <h2 class="text-lg font-medium text-gray-900">
-                                        {{ __('Are you sure you want to delete this topic?') }}
-                                    </h2>
+                                        <div class="mt-6 flex justify-end">
+                                            <x-secondary-button x-on:click="$dispatch('close')">
+                                                {{ __('Cancel') }}
+                                            </x-secondary-button>
 
-                                    <p class="mt-1 text-sm text-gray-600">
-                                        {{ __('This action will permanently delete the topic and all of its replies.') }}
-                                    </p>
-
-                                    <div class="mt-6 flex justify-end">
-                                        <x-secondary-button x-on:click="$dispatch('close')">
-                                            {{ __('Cancel') }}
-                                        </x-secondary-button>
-
-                                        <x-danger-button class="ms-3">
-                                            {{ __('Delete Topic') }}
-                                        </x-danger-button>
-                                    </div>
-                                </form>
-                            </x-modal>
-                        </div>
-                    @endif
+                                            <x-danger-button class="ms-3">
+                                                {{ __('Delete Topic') }}
+                                            </x-danger-button>
+                                        </div>
+                                    </form>
+                                </x-modal>
+                            @endcan
+                        @endauth
+                    </div>
 
                 </div>
             </div>
@@ -194,12 +199,14 @@
                             <!-- Reply Actions -->
                             @auth
                                 <div class="flex items-center gap-4 text-sm justify-end">
-                                    @if(auth()->user()->id === $reply->user_id)
 
+                                    @can('update' , $reply)
                                         <x-edit-button href="{{route('replies.edit' , $reply)}}">
                                             Edit
                                         </x-edit-button>
+                                    @endcan
 
+                                    @can('delete' , $reply)
                                         <x-danger-button
                                             x-data=""
                                             x-on:click="$dispatch('open-modal', 'confirm-reply-deletion-{{ $reply->id }}')"
@@ -231,8 +238,7 @@
                                                 </div>
                                             </form>
                                         </x-modal>
-
-                                    @endif
+                                    @endcan
                                 </div>
                             @endauth
                         </div>

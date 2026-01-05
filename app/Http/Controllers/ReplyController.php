@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reply;
 use App\Models\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ReplyController extends Controller
 {
@@ -15,13 +16,15 @@ class ReplyController extends Controller
     public function store(Topic $topic)
     {
 
-        request()->validate([
+        Gate::authorize('create', Reply::class);
+
+        $validated = request()->validate([
             'description' => ['required', 'string', 'max:1000'],
 
         ]);
 
         Reply::create([
-            'description' => request()->description,
+            'description' => $validated['description'],
             'user_id' => auth()->user()->id,
             'topic_id' => $topic->id
         ]);
@@ -42,6 +45,7 @@ class ReplyController extends Controller
      */
     public function edit(Reply $reply)
     {
+        Gate::authorize('update', $reply);
 
         return view('replies.edit', ['reply' => $reply]);
     }
@@ -51,13 +55,14 @@ class ReplyController extends Controller
      */
     public function update(Reply $reply)
     {
+        Gate::authorize('update', $reply);
 
-        request()->validate([
+        $validated = request()->validate([
             'description' => ['required', 'string', 'max:1000'],
         ]);
 
         $reply->update([
-            'description' => request()->description,
+            'description' => $validated['description'],
         ]);
 
         if (request()->input('redirect') === 'dashboard') {
@@ -72,6 +77,9 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
+
+        Gate::authorize('delete', $reply);
+
         $user = $reply->user;
 
         $reply->delete();

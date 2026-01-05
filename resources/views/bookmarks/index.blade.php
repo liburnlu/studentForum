@@ -13,6 +13,11 @@
     </x-slot>
 
     <div class="bg-gradient-to-b from-gray-50 to-gray-100 py-8">
+
+        @if(session('success'))
+            <x-success-toast></x-success-toast>
+        @endif
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if($bookmarks->isEmpty())
                 <div class="bg-white rounded-xl shadow-md border border-gray-200 p-12 text-center">

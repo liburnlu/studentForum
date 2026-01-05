@@ -10,9 +10,11 @@
                 </p>
             </div>
 
+            @auth
             <x-button-link href="{{ route('topics.create') }}">
                 Create Topic
             </x-button-link>
+            @endauth
         </div>
     </x-slot>
 

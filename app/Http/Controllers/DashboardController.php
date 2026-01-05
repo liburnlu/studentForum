@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -42,15 +43,35 @@ class DashboardController extends Controller
 
     public function topics(){
 
+        $topics = auth()->user()->topics();
 
-        $topics = auth()->user()->topics()->withCount('replies')->latest()->paginate(15);
+        if(request()->filled('search')){
+            $search = request()->query('search');
+
+            $topics->where('title' , 'like' , '%' . $search . '%');
+        }
+
+        $topics = $topics->withCount('replies')->latest()->paginate(15)->withQueryString();
 
         return view('dashboard.topics' , ['topics' => $topics]);
     }
 
     public function replies(){
 
-        $replies = auth()->user()->replies()->with('topic')->latest()->paginate(15);
+        $replies = auth()->user()->replies();
+
+        if(request()->filled('search')){
+            $search = request()->query('search');
+
+            $replies->where(function($query) use ($search) {
+                $query->where('description', 'like', '%' . $search . '%')
+                    ->orWhereHas('topic', function($q) use ($search) {
+                        $q->where('title', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $replies = $replies->with('topic')->latest()->paginate(15)->withQueryString();
 
         return view('dashboard.replies' , ['replies' => $replies]);
     }
