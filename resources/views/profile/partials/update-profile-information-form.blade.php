@@ -13,9 +13,51 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <!-- Profile Picture -->
+        <div>
+            <x-input-label for="profile_picture" :value="__('Profile Picture')" />
+
+            <div class="mt-4 flex items-center gap-6">
+                <!-- Current Profile Picture -->
+                <div class="relative">
+                    @if($user->profile_picture)
+                        <img
+                            src="{{ asset('storage/' . $user->profile_picture) }}"
+                            alt="Profile Picture"
+                            class="h-24 w-24 rounded-full object-cover border-2 border-gray-300"
+                        >
+                    @else
+                        <div class="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center border-2 border-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Upload Input -->
+                <div>
+                    <input
+                        id="profile_picture"
+                        name="profile_picture"
+                        type="file"
+                        accept="image/*"
+                        class="block w-full text-sm text-gray-500
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-lg file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-indigo-50 file:text-indigo-700
+                            hover:file:bg-indigo-100"
+                    />
+                    <p class="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 2MB</p>
+                    <x-input-error class="mt-2" :messages="$errors->get('profile_picture')" />
+                </div>
+            </div>
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -49,16 +91,6 @@
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
-            @endif
         </div>
     </form>
 </section>

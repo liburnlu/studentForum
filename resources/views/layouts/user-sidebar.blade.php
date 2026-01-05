@@ -88,11 +88,8 @@
     <!-- User Info -->
     <div class="sticky bottom-0 border-t border-gray-200 p-4">
         <div class="flex items-center gap-3">
-            <img
-                src="{{ auth()->user()->profile_photo_url ?? '' }}"
-                alt=""
-                class="size-10 rounded-full object-cover bg-gray-200"
-            >
+            <x-user-avatar :user="auth()->user()"></x-user-avatar>
+
 
             <div class="text-sm">
                 <p class="font-medium text-gray-800">

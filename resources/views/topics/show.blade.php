@@ -57,10 +57,7 @@
                     <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                         <!-- Author -->
                         <div class="flex items-center">
-                            <div
-                                class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold mr-2">
-                                {{ strtoupper(substr($topic->user->name, 0, 1)) }}
-                            </div>
+                            <x-user-avatar :user="$topic->user"></x-user-avatar>
                             <span>
                                 Posted by
                                 <span class="font-medium text-gray-900">{{ $topic->user->name }}</span>
@@ -180,10 +177,8 @@
                             <div class="flex items-start justify-between mb-4">
                                 <div class="flex items-center">
                                     <!-- User Avatar -->
-                                    <div
-                                        class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold mr-3">
-                                        {{ strtoupper(substr($reply->user->name, 0, 1)) }}
-                                    </div>
+                                    <x-user-avatar :user="$reply->user"></x-user-avatar>
+
                                     <div>
                                         <p class="font-medium text-gray-900">{{ $reply->user->name }}</p>
                                         <p class="text-sm text-gray-500">{{ $reply->created_at->diffForHumans() }}</p>

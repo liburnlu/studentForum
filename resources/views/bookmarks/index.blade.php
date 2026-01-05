@@ -50,9 +50,8 @@
                                 <div class="grid grid-cols-12 gap-4 items-center">
                                     <!-- Avatar Column -->
                                     <div class="col-span-1">
-                                        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-md ring-2 ring-indigo-50">
-                                            {{ strtoupper(substr($bookmark->topic->user->name, 0, 1)) }}
-                                        </div>
+                                        <x-user-avatar :user="$bookmark->topic->user"></x-user-avatar>
+
                                     </div>
 
                                     <!-- Topic Column -->

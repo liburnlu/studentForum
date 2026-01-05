@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -26,15 +27,37 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // 1. Fill other validated data (name, email, etc.)
+        $user->fill($request->validated());
+
+        // 2. Handle the File Upload
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+
+            if ($file->isValid()) {
+                // Delete old picture if it exists
+                if ($user->profile_picture) {
+                    Storage::disk('public')->delete($user->profile_picture);
+                }
+
+                // Store new file and get the RELATIVE path (e.g., 'profile_pictures/filename.jpg')
+                $filename = 'profile_' . $user->id . '_' . time() . '.' . $file->extension();
+                $path = $file->storeAs('profile_pictures', $filename, 'public');
+
+                // Save the relative path to the database
+                $user->profile_picture = $path;
+            }
         }
 
-        $request->user()->save();
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('success', 'Profile updated successfully');
     }
 
     /**

@@ -131,11 +131,7 @@
                     <div class="p-6">
                         <div class="flex gap-5">
                             <!-- Avatar -->
-                            <div class="flex-shrink-0">
-                                <div class="h-14 w-14 rounded-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-indigo-50">
-                                    {{ strtoupper(substr($topic->user->name, 0, 1)) }}
-                                </div>
-                            </div>
+                            <x-user-avatar :user="$topic->user" size="lg"></x-user-avatar>
 
                             <!-- Content -->
                             <div class="flex-1 min-w-0">

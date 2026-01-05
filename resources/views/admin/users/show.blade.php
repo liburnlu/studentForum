@@ -2,9 +2,8 @@
     <x-slot name="header">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-4">
-                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-indigo-50">
-                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                </div>
+                <x-user-avatar :user="$user"></x-user-avatar>
+
                 <div>
                     <h2 class="text-lg font-semibold text-gray-800">
                         {{ $user->name }}
